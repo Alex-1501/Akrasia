@@ -30,6 +30,8 @@ def activeClients(flag):
      counter = 0
 
      if len(client_list) < 1:
+          clear()
+          printMenu()
           print("Error: No Active Clients Connected\n")
 
      if len(client_list) >= 1 and flag == "1":
@@ -74,10 +76,14 @@ def main(HOST, PORT):
         \/       \/               \/       \/            \/  
 """)
     threading.Thread(target=startListener, args=(HOST, PORT)).start()
-    print(f"Listening: {HOST} : {PORT}\n")
+    
+    print(f"""                             
+Listening: {HOST} : {PORT}\n 
+""")
+    #print(f"Listening: {HOST} : {PORT}\n")
 
     while(isRunning):
-        # Print menu but once a user selects an option, it will not be printed again
+        # Print menu but once a user selects an option, it will not be printed again - Redo this logic later makes no sense but works for now
         if menu:
             printMenu()
             menu = False
@@ -93,8 +99,6 @@ def main(HOST, PORT):
         else:
             print("Invalid Option\n")
             menu = True
-
-
 
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])

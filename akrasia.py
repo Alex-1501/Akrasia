@@ -47,20 +47,7 @@ def activeClients():
      for client in client_list:
       counter = counter + 1
       return f"[{counter}] {client.getpeername()}\n"
-
-    # -> Why did I do this? I don't know - I just realized that the two flags are not needed and is redundant
-    #  if flag == "1":
-    #     clear()
-    #     printMenu()
-    #     for client in client_list:
-    #         return f"\nClient: {client.getpeername()}"
-    #  elif flag == "2":
-    #       clear()
-    #       printMenu()
-    #       for client in client_list:
-    #         counter = counter + 1
-    #         return f"[{counter}] {client.getpeername()}\n"
-
+     
 def removeClient():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -93,8 +80,6 @@ def main(HOST, PORT):
     print(f"""                             
 Listening: {HOST} : {PORT}\n 
 """)
-    #print(f"Listening: {HOST} : {PORT}\n")
-
     while(isRunning):
         str = ""
         # Print menu but once a user selects an option, it will not be printed again - Redo this logic later makes no sense but works for now
@@ -117,6 +102,9 @@ Listening: {HOST} : {PORT}\n
             str = activeClients()
             print(str)
             selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
+            selectedClient = int(selectedClientStr)
+            x = client_list[selectedClient - 1]
+            
         elif option == "X":
             isRunning = False
             for client in client_list:

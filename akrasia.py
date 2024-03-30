@@ -33,18 +33,25 @@ def activeClients(flag):
           clear()
           printMenu()
           return "Error: No Active Clients Connected\n"
+     
+     clear()
+     printMenu()
+     for client in client_list:
+      counter = counter + 1
+      return f"[{counter}] {client.getpeername()}\n"
 
-     if len(client_list) >= 1 and flag == "1":
-        clear()
-        printMenu()
-        for client in client_list:
-            return f"\nClient: {client.getpeername()}"
-     elif len(client_list) >= 1 and flag == "2":
-          clear()
-          printMenu()
-          for client in client_list:
-            counter = counter + 1
-            return f"[{counter}] {client.getpeername()}\n"
+    # -> Why did I do this? I don't know - I just realized that the two flags are not needed and is redundant
+    #  if flag == "1":
+    #     clear()
+    #     printMenu()
+    #     for client in client_list:
+    #         return f"\nClient: {client.getpeername()}"
+    #  elif flag == "2":
+    #       clear()
+    #       printMenu()
+    #       for client in client_list:
+    #         counter = counter + 1
+    #         return f"[{counter}] {client.getpeername()}\n"
 
 def removeClient():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

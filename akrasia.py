@@ -108,6 +108,7 @@ Listening: {HOST} : {PORT}\n
             print(str)
             printMenu()
         else:
+            clear()
             print("Invalid Option\n")
             menu = True
 

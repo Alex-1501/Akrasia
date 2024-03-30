@@ -32,19 +32,19 @@ def activeClients(flag):
      if len(client_list) < 1:
           clear()
           printMenu()
-          print("Error: No Active Clients Connected\n")
+          return "Error: No Active Clients Connected\n"
 
      if len(client_list) >= 1 and flag == "1":
         clear()
         printMenu()
         for client in client_list:
-            print(f"\nClient: {client.getpeername()}")
+            return f"\nClient: {client.getpeername()}"
      elif len(client_list) >= 1 and flag == "2":
           clear()
           printMenu()
           for client in client_list:
             counter = counter + 1
-            print(f"[{counter}] {client.getpeername()}\n")
+            return f"[{counter}] {client.getpeername()}\n"
 
 def removeClient():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,10 +57,10 @@ def removeClient():
             x.close()
             client_list.remove(x)
             clear()
-            print("\nClient Removed Successfully\n")
+            return"\nClient Removed Successfully\n"
         except:
             clear()
-            print("\nError: Could Not Remove Client\n")
+            return "\nError: Could Not Remove Client\n"
 
 
 
@@ -83,6 +83,7 @@ Listening: {HOST} : {PORT}\n
     #print(f"Listening: {HOST} : {PORT}\n")
 
     while(isRunning):
+        str = ""
         # Print menu but once a user selects an option, it will not be printed again - Redo this logic later makes no sense but works for now
         if menu:
             printMenu()
@@ -91,10 +92,13 @@ Listening: {HOST} : {PORT}\n
         option = input("Select An Option: ")
 
         if option == "1":
-            activeClients(option)
+            str = activeClients(option)
+            print(str)
         elif option == "2":
-            activeClients(option)
-            removeClient()
+            str = activeClients(option)
+            print (str)
+            str = removeClient()
+            print(str)
             printMenu()
         else:
             print("Invalid Option\n")

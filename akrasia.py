@@ -40,12 +40,6 @@ def startListener(HOST, PORT):
 def activeClients():
      counter = 0
 
-    # Check if there are active clients 
-    #  if len(client_list) < 1:
-    #       clear()
-    #       printMenu()
-    #       return "Error: No Active Clients Connected\n" | might not need this 44-47 lines
-     
      clear()
      printMenu()
      # Print active clients
@@ -98,58 +92,60 @@ def main(HOST, PORT):
 \____|__  / |__|_ \  |__|    (____  / /____  > |__| (____  / 
         \/       \/               \/       \/            \/  
 """)
+    # Start the listener as a daemon
     listener = threading.Thread(target=startListener, args=(HOST, PORT))
+    listener.daemon = True
     listener.start()
-
+    
     print(f"""                             
 Listening: {HOST} : {PORT}\n 
 """)
-    while(isRunning):
+    try:
+        while(isRunning):
         # Print menu but once a user selects an option, it will not be printed again - Redo this logic later makes no sense but works for now
-        if menu:
-            printMenu()
-            menu = False
-
-        option = input("Select An Option: ")
-
-        # Handle user inputs for 1,2,3 and X
-        if option == "1":
-            print(activeClients())
-
-        elif option == "2":
-            if len(client_list) < 1:
-                clear()
+            if menu:
                 printMenu()
-                print("Error: No Active Clients Connected\n")
-                continue
-            print(activeClients())
-            print(removeClient())
+                menu = False
 
-        elif option == "3":
-            print(activeClients())
+            option = input("Select An Option: ")
 
-            # Check if there are active clients before starting a shell
-            if len(client_list) < 1:
-                continue
-            selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
-            selectedClient = int(selectedClientStr)
-            x = client_list[selectedClient - 1]
-            shell(x)
-            
-        elif option == "x" or option == "X":
-            # Close all connections
-            for client in client_list:
-                client.close()
-            isRunning = False
-            clear()
-            print("Exiting...")
-            sys.exit(0)
-        
-        else:
-            clear()
-            print("Invalid Option\n")
-            menu = True
+            # Handle user inputs for 1,2,3 and X
+            if option == "1":
+                print(activeClients())
+
+            elif option == "2":
+                if len(client_list) < 1:
+                    clear()
+                    printMenu()
+                    print("Error: No Active Clients Connected\n")
+                    continue
+                print(activeClients())
+                print(removeClient())
+
+            elif option == "3":
+                print(activeClients())
+
+                # Check if there are active clients before starting a shell
+                if len(client_list) < 1:
+                    continue
+                selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
+                selectedClient = int(selectedClientStr)
+                x = client_list[selectedClient - 1]
+                shell(x)
+            else:
+                clear()
+                print("Invalid Option\n")
+                menu = True
+    except KeyboardInterrupt:
+        print("\n")
+        pass
+    finally:
+        sys.exit(0)
+
+
 
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])
+# HOST = "127.0.0.1"
+# PORT = 8080
 main(HOST, PORT)

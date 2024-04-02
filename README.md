@@ -5,9 +5,10 @@ This is a project aimed to enhance my python skills, specifically with the use o
 
 ### ToDo:
 - ~~Implement Return Statement Into Functions Instead Of Directly Printing It Out~~
-- Improve Menu Loop
+- Fix Issue With ActiveClients() Only Returning The First Item (HIGH PRIORITY)
+- Make Code Readable (HIGH PRIORITY)
 - ~~Add A Way To Issue Commands~~
-- Allow for clients to be gracefully dropped
-- Allow for client.py to automatically be adjusted to server's IP and Port (?)
-- Allow for payloads to be sent
+- ~~Allow for clients to be gracefully dropped~~
+- Allow for client.py to automatically be adjusted to server's IP and Port (?) (LOW)
+- Allow for payloads to be sent (LOW)
 - 

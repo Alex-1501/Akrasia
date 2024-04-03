@@ -13,7 +13,7 @@ def clear():
 
 # Print menu
 def printMenu():
-    print("[1] List Active Clients")
+    print("\n[1] List Active Clients")
     print("[2] Remove Connected Client")
     print("[3] Start A Shell With A Client\n")
     print("[X] Exit\n")
@@ -36,34 +36,44 @@ def startListener(HOST, PORT):
              client_list.append(conn)
         
 # List active clients
-def activeClients():
-     counter = 0
+def returnListOfActiveClients():
 
-     clear()
-     printMenu()
-     # Print active clients
-     for client in client_list:
-      counter = counter + 1
-      return f"[{counter}] {client.getpeername()}\n"
+    clear()
+    activeClients = []
 
-# Remove a client from both a list and close the connection     
-def removeClient():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    for i, client in enumerate(client_list): # Enumerate the list of clients, i = index, client = client
+        activeClients.append(client.getpeername()) # Append the client's address to the clients list
+    return activeClients
+    
 
-    selectedClientStr = input("\nTo Remove A Client, Type In Their Number: ")
-    selectedClient = int(selectedClientStr)
-    x = client_list[selectedClient - 1]
+def printListOfActiveClients(activeClients):
 
-    if x in client_list:
-        try:
-            x.close()
-            client_list.remove(x)
-            clear()
-            return"\nClient Removed Successfully\n"
-        except Exception as e:
-            clear()
-            return f"\nError: {e}"
-        
+    if not activeClients:
+        print(f"No Active Clients")
+    else:
+        print(f"Number of Clients: {len(activeClients)}")    
+        for i, client in enumerate(activeClients): # Enumerate the clients list, i = index, client = client
+            print(f"[{i+1}] {client}") # Sample output: [1] ('192.168.128.54', 56777)\
+    
+def removeClient(activeClients):
+
+    clientID = int(input("\nTo Go Back, Enter '0'\nTo Remove A Client, Type In Their Number: "))
+
+    if clientID == 0: # User Can Return To Menu With '0'
+        clear()
+        return
+    
+    clientToRemove = client_list[clientID - 1]
+
+    try:
+        clientToRemove.close()
+        client_list.remove(clientToRemove)
+
+        print(f"Removed: [{clientID}] {clientToRemove.getpeername()}")
+        return activeClients
+    
+    except Exception as e:
+        print(f"Error: {e}")
 
 # Start a shell with a client 
 def shell(conn):
@@ -82,7 +92,6 @@ def shell(conn):
 
 def main(HOST, PORT):
     isRunning = True
-    menu = True
     print("""                             
    _____     __                                .__           
   /  _  \   |  | __ _______  _____      ______ |__| _____    
@@ -100,46 +109,42 @@ def main(HOST, PORT):
 Listening: {HOST} : {PORT}\n 
 """)
     try:
-        while(isRunning):
-        # Print menu but once a user selects an option, it will not be printed again - Redo this logic later makes no sense but works for now
-            if menu:
-                printMenu()
-                menu = False
+        activeClients = []
 
+        while isRunning:
+            printMenu()
             option = input("Select An Option: ")
 
-            # Handle user inputs for 1,2,3 and X
-            if option == "1":
-                print(activeClients())
+            # Check for active clients only once at the beginning of the loop
+            if not activeClients:
+                activeClients = returnListOfActiveClients()
+                print("No Active Clients")
+                continue
 
-            elif option == "2":
-                if len(client_list) < 1:
+            match option:
+                case "1": # Option: Lists All Connected Clients
                     clear()
-                    printMenu()
-                    print("Error: No Active Clients Connected\n")
-                    continue
-                print(activeClients())
-                print(removeClient())
+                    printListOfActiveClients(activeClients)
 
-            elif option == "3":
-                print(activeClients())
+                case "2": # Option: Removes A Client
+                    clear()
+                    printListOfActiveClients(activeClients)
+                    activeClients = removeClient(activeClients)
 
-                # Check if there are active clients before starting a shell
-                if len(client_list) < 1:
-                    continue
-                selectedClientStr = input("To Start A Shell, Type In The Client Number: ")
-                selectedClient = int(selectedClientStr)
-                x = client_list[selectedClient - 1]
-                shell(x)
-            else:
-                clear()
-                print("Invalid Option\n")
-                menu = True
+                case "3": # Option: Start A Shell Session With Client
+                    clear()
+
+                    printListOfActiveClients(activeClients)
+
+                    clientID = int(input("To Start A Shell, Type In The Client Number: "))
+                    selectedClient = client_list[clientID - 1]
+                    shell(selectedClient)
+
+                case _:
+                    print ("Invalid Option")
     except KeyboardInterrupt:
         print("\n")
         pass
-    finally:
-        sys.exit(0)
 
 
 

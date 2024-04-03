@@ -115,9 +115,11 @@ Listening: {HOST} : {PORT}\n
             printMenu()
             option = input("Select An Option: ")
 
-            # Check for active clients only once at the beginning of the loop
+            # Populate activeClients each time before using it
+            activeClients = returnListOfActiveClients()
+
+            # Check if activeClients is empty
             if not activeClients:
-                activeClients = returnListOfActiveClients()
                 print("No Active Clients")
                 continue
 

@@ -5,8 +5,8 @@ This is a project aimed to enhance my python skills, specifically with the use o
 
 ### ToDo:
 - ~~Implement Return Statement Into Functions Instead Of Directly Printing It Out~~
-- Fix Issue With ActiveClients() Only Returning The First Item (HIGH PRIORITY)
-- Make Code Readable (HIGH PRIORITY)
+- ~~Fix Issue With ActiveClients() Only Returning The First Item (HIGH PRIORITY)~~
+- Make Code Readable (HIGH PRIORITY (In-Progress)
 - ~~Add A Way To Issue Commands~~
 - ~~Allow for clients to be gracefully dropped~~
 - Allow for client.py to automatically be adjusted to server's IP and Port (?) (LOW)
